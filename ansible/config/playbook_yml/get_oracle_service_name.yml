@@ -1,0 +1,26 @@
+#这个是通过oracle数据库里面进行查询服务名
+---
+- hosts: 192.168.9.140
+  ignore_errors: yes
+  tasks:
+    - name: "复制需要执行的文件"
+      copy: 
+        src: '{{ item.src }}'
+        dest: '{{ item.dest }}'
+      with_items: 
+        - { src: '/Program/Django/ansible/oracle/loadScript.sh', dest: '/mnt/ansible/temp/' }
+        - { src: '/Program/Django/ansible/oracle/selectServiceName.sql', dest: '/mnt/ansible/temp/' }
+    - name: "执行脚本测试"
+      shell: sh /mnt/ansible/temp/loadScript.sh /mnt/ansible/temp/selectServiceName.sql
+      register: result
+      failed_when: false
+    - name: "检查结果"
+      fail:
+        msg: "{{result.stdout_lines}}"
+      failed_when: result.rc != 0
+    - name: show oracle service name
+      debug: var=result.stdout verbosity=0
+    - name: delete temp dir
+      file: 
+        path: /mnt/ansible/temp
+        state: absent

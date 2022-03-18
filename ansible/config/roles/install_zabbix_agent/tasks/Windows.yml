@@ -1,0 +1,10 @@
+---
+- name: "Windows Agnt2"
+  include_tasks: Windows-agent2.yml
+  when:
+    - ansible_agent == "Agent2"
+- name: "Windows Agnt"
+  include_tasks: Windows-agent.yml
+  when:
+    - ansible_agent != "Agent2"
+

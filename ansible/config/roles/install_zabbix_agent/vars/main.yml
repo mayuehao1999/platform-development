@@ -1,0 +1,11 @@
+zabbix_dir: /zabbix/zabbix-agent
+zabbix_logdir: /var/log/zabbix
+zabbix_configdir: /etc/zabbix
+zabbix_win_dir: C:\zabbix
+zabbix_win_logdir: C:\zabbix\log
+zabbix_version: 5.0.12
+zabbix_user: zabbix
+zabbix_port: 10050
+zabbix_server_ip: 192.168.9.140
+zabbix_pidfile: /var/run/zabbix
+filebeat_version: 7.14.0

@@ -1,0 +1,9 @@
+---
+- name: "Windows环境部署"
+  include_tasks: Windows.yml
+  when:
+    - ansible_os_family == "Windows"
+- name: "Linux环境部署"
+  include_tasks: RedHat.yml
+  when:
+    - ansible_os_family != "Windows"

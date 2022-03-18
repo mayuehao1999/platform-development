@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+  <head lang="en">
+    <meta charset="UTF-8" />
+    <title>3d机房demo</title>
+    <style>
+      body {
+        padding: 0px;
+        margin: 0px;
+      }
+      .aside-hidden {
+        position: absolute;
+        left: -780px;
+        top: 30px;
+        bottom: 0;
+        width: 780px;
+        background: rgb(255 255 255 / 72%);
+        transition: 0.2s ease-out;
+        -webkit-transition: 0.2s ease-out;
+        z-index: 100;
+      }
+      .aside-show {
+        position: absolute;
+        left: 0px;
+        top: 30px;
+        bottom: 0;
+        width: 780px;
+        background: rgb(255 255 255 / 72%);
+        transition: 0.2s ease-out;
+        -webkit-transition: 0.2s ease-out;
+        z-index: 100;
+      }
+
+      ul {
+        display: none;
+        box-shadow: 0px 0px 5px #f4979a;
+        text-align: center;
+        width: 160px;
+        height: 200px;
+        position: absolute;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        height: 50px;
+        line-height: 50px;
+        font-size: 16px;
+        list-style: none;
+        border: 1px solid #eee;
+        background-color: ghostwhite;
+      }
+      .clear:after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+      body {
+        overflow: hidden;
+      }
+      #detail {
+        position: fixed;
+        right: 20px;
+        top: 40px;
+        width: 300px;
+        height: 500px;
+        background-color: darkgray;
+        display: none;
+      }
+      #addCabinet {
+        position: fixed;
+        left: 20px;
+        top: 40px;
+        width: 300px;
+        height: 500px;
+        background-color: lightgray;
+        display: none;
+      }
+      #addDevice {
+        position: fixed;
+        left: 20px;
+        top: 40px;
+        width: 300px;
+        height: 500px;
+        background-color: lightgray;
+        display: none;
+      }
+      #topDiv {
+        position: fixed;
+      }
+
+      #tooltip {
+        position: absolute;
+        display: none;
+        color: #000;
+        max-width: 200px;
+        width: 32px;
+        height: auto;
+        line-height: 22px;
+        text-align: center;
+        padding: 10px;
+        background: #acdefe;
+        opacity: 0.8;
+        border-radius: 5px;
+      }
+      #tooltip span {
+        margin-left: 50%;
+        bottom: -10px;
+        left: -10px;
+        position: absolute;
+        border-top: 10px solid #acdefe;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+      }
+    </style>
+
+    <script src="{% static '3d_computer_room/lib/jquery.js' %}"></script>
+
+    <!-- 配置文件前台化的表格引入的css -->
+    <link rel="stylesheet" href="{% static '3d_computer_room/css/style.css' %} " />
+    <link rel="stylesheet" href="{% static '3d_computer_room/css/bootstrap.min.css' %} " />
+
+    <!-- 上面是对话框的css，下面是等待数据返回动画的css-->
+    <link rel="stylesheet" href="{% static '3d_computer_room/css/easyhelper.min.css' %} " />
+    <link rel="stylesheet" href="{% static '3d_computer_room/css/wait.css' %} " />
+
+
+    <script src="{% static '3d_computer_room/lib/es6-shim.min.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/jquery.transit.min.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/easyhelper.min.js' %}"></script>
+
+    <!-- 引入3D库-->
+    <script src="{% static '3d_computer_room/lib/three.js' %}"></script>
+    <!-- 引入控制器-->
+    <script src="{% static '3d_computer_room/lib/OrbitControls_alter.js' %}"></script>
+
+    <script src="{% static '3d_computer_room/lib/TransformControls.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/DragControls.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/ThreeUtil.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/MTLLoader.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/OBJLoader.js' %}"></script>
+
+    <!-- 引入动画库-->
+    <script src="{% static '3d_computer_room/lib/tween.min.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/ThreeBSP.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/FBXLoader.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/inflate.min.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/inflate.min.js' %}"></script>
+
+    <!-- 引入表格需要的库-->
+    <script src="{% static '3d_computer_room/lib/bootstrap.min.js' %}"></script>
+    <script src="{% static '3d_computer_room/lib/bootbox.min.js' %}"></script>
+    
+  </head>
+  <body>
+    <div id="mask" class="helper-dialog-mask" style="opacity: 1; display: none">
+      <section>
+        <div class="sk-double-bounce">
+          <div class="sk-child sk-double-bounce-1"></div>
+          <div class="sk-child sk-double-bounce-2"></div>
+        </div>
+      </section>
+    </div>
+
+    <div id="addCabinet">
+      机柜名称：<input id="cabinetName" value="" type="text" /><br />
+      U数：<select id="cabinetU">
+        <option value="2">2</option>
+        <option value="41">41</option>
+        <option value="42">42</option></select
+      ><br />
+      X坐标：<input id="x" value="0" type="text" /><br />
+      Y坐标：<input id="y" value="0" type="text" /><br />
+      Z坐标：<input id="z" value="0" type="text" /><br />
+      <button id="save">保存</button>
+    </div>
+    <div id="addDevice">
+      设备名称：<input id="deviceName" value="" type="text" /><br />
+      IP地址：<input id="deviceIp" value="" type="text" /><br />
+      设备类型：
+      <select id="deviceType">
+        <option value="server">服务器</option>
+        <option value="switch">交换机</option></select
+      ><br />
+      所属机柜：
+      <select id="cabinetSelector">
+        <option>请选择</option></select
+      ><br />
+      位置：
+      <select id="indexSelector">
+        <option>请选择</option></select
+      ><br />
+      告警级别：
+      <select id="alarmLevelSelector">
+        <option value="0">正常</option>
+        <option value="1">次要</option>
+        <option value="2">主要</option>
+        <option value="3">严重</option></select
+      ><br />
+      告警原因：<input id="alarmCause" value="" type="text" /><br />
+      <button id="add">保存</button>
+    </div>
+    <div id="topDiv">
+      <!--        
+        <button id="addCab" style="">添加机柜</button>
+        <button id="addDev" style="">添加设备</button>
+        <button id="editCabinetIndex" style="">打开编辑模式</button>
+        <button id="speak" style="">播报</button>
+      -->
+
+      <button id="reflush" style="">还原视角</button>
+      <input id="serachIp" type="text" placeholder="请输入IP地址" /><button
+        id="search"
+      >
+        搜索
+      </button>
+    </div>
+    <div id="content">
+      <div id="aside" class="aside-hidden">
+        <h3 style="color: #72767b">主机信息</h3>
+        <div
+          id="detail2"
+          style="
+            margin-left: 2%;
+            margin-top: 10px;
+            border: 3px ridge;
+            margin-right: 2%;
+          "
+        ></div>
+      </div>
+      <div id="detail">
+        <a href="#" id="close" onclick="closeDetail()">关闭</a>
+        <div id="information"></div>
+      </div>
+      <div id="tooltip">
+        <span></span>
+        <div id="tipDiv"></div>
+      </div>
+    </div>
+
+    <ul id="list">
+      <!--
+        <li><a href="#">选项一</a></li>
+        <li>选项二</li>
+        <li>选项三</li>
+        <li>选项四</li>
+      -->
+    </ul>
+    <input type="checkbox" id="sideToggle" />
+    <ul id="list2">
+    <!--
+      <li><a href="#" id="****">*******</a></li>
+      <li><a href="#" id="****">*******</a></li>
+      <li><a href="#" id="ansible_ping">ping</a></li>
+      <li><a href="#" id="****">*******</a></li>
+    </ul>
+    -->
+  </body>
+
+  <!-- script src不受同源特性 读取配置文件并载入-->
+  <script type="text/javascript">
+    var configParam
+    var ipAddress = "http://" + {{ ipAddress | safe}} + ":8099/static/3d_computer_room/"
+    console.log(ipAddress)
+    $.get(
+      ipAddress + 'js/config.json',
+      function (data) {
+        configParam = data
+        $.getScript(
+          ipAddress +'js/zabbix_request.js',
+          () => {
+            console.log('加载文件')
+          }
+        )
+      }
+    )
+  </script>
+</html>

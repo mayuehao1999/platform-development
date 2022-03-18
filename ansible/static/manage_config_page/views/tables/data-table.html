@@ -1,0 +1,266 @@
+<div class="page page-table-static clearfix">
+  <ol class="breadcrumb breadcrumb-small">
+    <li>监控主机配置表单</li>
+    <li class="active"><a href="#/tables/data-table">ansible host配置表单</a></li>
+  </ol>
+  
+      <div class="row">
+        <div class="page-wrap">
+          <div class="col-lg-12">
+            <div
+              class="panel panel-lined table-responsive mb30"
+              ng-controller="DataTableCtrl"
+            >
+              <!--这部分是写的悬浮输入框-->
+              <div class="modal fade" id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+                  <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                          <!--悬浮框头部-->
+                          <div class="modal-header">
+                              <button type="button" ng-click="resetForm()" class="close" data-dismiss="modal" aria-hidden="false">×</button>
+                              <h4 class="modal-title" id="myModalLabel">修改</h4>
+                          </div>
+
+                          <!--中间的表单,-->
+                          <div class="modal-body">
+              			      	<div class="panel panel-lined mb30">
+                              <!--表单头部-->
+              			      		<div class="panel-heading"><i>ansible host数据修改</i></div>
+              			      		<!--表单表单体-->
+                              <div class="panel-body">
+                              	<form class="form-inline" role="form"  >
+              			      				<div class="form-group form-group-sm">
+
+              			      					<div class="input-group">
+              			      						<span class="input-group-addon">ip地址</span>
+              			      					  <input type="text" ng-model="formData.ip_address" class="form-control" placeholder="请输入ip所属组">
+              			      					</div>
+
+              			      					<div class="input-group">
+              			      						<span class="input-group-addon">端口</span>
+              			      						<input type="text" ng-model="formData.ansible_ssh_port" class="form-control" placeholder="请填入链接端口">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">ip所属组</span>
+              			      						<input type="text" ng-model="formData.group_name" class="form-control" placeholder="请输入ip所属组">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">用户名</span>
+              			      						<input type="text" ng-model="formData.ansible_ssh_user" class="form-control" placeholder="请输入用户名">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">链接密码</span>
+              			      						<input type="password" ng-model="formData.ansible_ssh_pass" class="form-control" placeholder="请输入连接密码">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">操作系统类型</span>
+                                      <select ng-model="formData.system" class="form-control">
+              			      						  <option value="linux" selected>linux</option>
+              			      						  <option value="winodws">winodws</option>
+              			      					  </select>
+              			      					</div>
+              			      				</div>
+              			      			</form>
+              			      		</div>
+                              <!--表单体结束-->
+              			      	</div>
+                          </div>
+                        <!--表单体结束-->
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-default" ng-click="resetForm()" data-dismiss="modal">关闭</button>
+                              <button type="button" ng-click="reviseHostConfig()" class="btn btn-primary" data-dismiss="modal">提交更改</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="panel-body">
+                <div class="small text-bold left mt5">
+                  每一页展示&nbsp;
+                  <select
+                    data-ng-model="numPerPage"
+                    data-ng-options="num for num in numPerPageOpts"
+                    data-ng-change="onNumPerPageChange()"
+                  ></select>
+                  &nbsp;条数据
+                </div>
+                <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal">新增</button>
+
+                <button type="button" class="btn btn-info btn-xs">
+                  oracle数据库授权
+                </button>
+
+                <form class="form-horizontal right col-lg-4">
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    placeholder="请数据搜索的数据的一部分"
+                    data-ng-model="searchKeywords"
+                    data-ng-keyup="search()"
+                  />
+                </form>
+              </div>
+
+              <!-- data table -->
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>多选框</th>
+                    
+                    <th>
+                      ip地址
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('ip_address') "
+                          ng-class="{active: row == 'ip_address'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-ip_address') "
+                          ng-class="{active: row == '-ip_address'}"
+                        ></i>
+                      </div>
+                    </th>
+
+                    <th>
+                      连接端口
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('ansible_ssh_port') "
+                          ng-class="{active: row == 'ansible_ssh_port'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-ansible_ssh_port') "
+                          ng-class="{active: row == '-ansible_ssh_port'}"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      连接用户名
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('ansible_ssh_user') "
+                          ng-class="{active: row == 'ansible_ssh_user'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-ansible_ssh_user') "
+                          ng-class="{active: row == '-ansible_ssh_user'}"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      连接用户密码
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('ansible_ssh_pass') "
+                          ng-class="{active: row == 'ansible_ssh_pass'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-ansible_ssh_pass') "
+                          ng-class="{active: row == '-ansible_ssh_pass'}"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      组名
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('group_name') "
+                          ng-class="{active: row == 'group_name'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-group_name') "
+                          ng-class="{active: row == '-group_name'}"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      操作系统
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('system') "
+                          ng-class="{active: row == 'system'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-system') "
+                          ng-class="{active: row == '-system'}"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="data in currentPageStores track by $index">
+                    <td>
+                      <label>
+                        <input
+                          type="checkbox"
+                          class="toggle"
+                          ng-model="todo.completed"
+                          ng-change="toggleCompleted(todo)"
+                          ng-checked="todo.completed"
+                        />
+                        <span></span>
+                      </label>
+                    </td>
+                    <td>{{data.ip_address}}</td>
+                    <td>{{data.ansible_ssh_port}}</td>
+                    <td>{{data.ansible_ssh_user}}</td>
+                    <td>{{data.ansible_ssh_pass}}</td>
+                    <td>{{data.group_name}}</td>
+                    <td>{{data.system}}</td>
+                    <td>
+                      <a data-toggle="modal" data-target="#myModal" ng-click="edit(data.ip_address)">编辑</a>
+                      <a ng-click="del(data.ip_address)">删除</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- #end data table -->
+
+              <div class="panel-footer clearfix">
+                <p class="left mt15 small">
+                  展示 {{currentPageStores.length*(currentPage - 1) + 1}} 条数据到
+                  {{currentPageStores.length*currentPage}} 条数据，一共有 {{datas.length}}
+                  条数据
+                </p>
+                <pagination
+                  boundary-links="true"
+                  total-items="filteredData.length"
+                  ng-model="currentPage"
+                  class="pagination-sm right"
+                  max-size="5"
+                  ng-change="select(currentPage)"
+                  items-per-page="numPerPage"
+                  rotate="false"
+                  previous-text="&lsaquo;"
+                  next-text="&rsaquo;"
+                  first-text="&laquo;"
+                  last-text="&raquo;"
+                ></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- #end row -->
+      </div>
+      <!-- #end page-wrap -->
+    </div>
+  </div>
+</div>

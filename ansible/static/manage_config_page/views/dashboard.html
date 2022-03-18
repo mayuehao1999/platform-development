@@ -1,0 +1,64 @@
+<div class="page page-dashboard clearfix">
+  <div class="dash-head clearfix">
+    <div class="left">
+      <h3 class="text-uppercase title text-normal">主页</h3>
+      <p class="small text-uppercase">服务器信息概括</p>
+    </div>
+  </div>
+
+  <div class="page-wrap" ng-controller="DashboardCtrl">
+    <div class="row">
+      <div class="col-lg-6" ng-repeat="information in computerInformations">
+        <div class="panel panel-lined mb30 forecast-widget">
+          <div class="panel-body">
+            <div class="clearfix mb30">
+              <div class="left">
+                <div class="text-bold forecast-today text-center">
+                  <i class="fa fa-desktop" aria-hidden="true"></i>
+                </div>
+                <div
+                  class="current-day text-uppercase bg-info text-center small"
+                >
+                  ip:{{information.ip}}
+                </div>
+              </div>
+            </div>
+            <!-- forecast-details -->
+            <ul class="list-unstyled forecast-details clearfix">
+              <li class="col-md-6 col-sm-6 clearfix mb15">
+                <span class="text-bold left">服务器名称</span>
+                <span class="right">{{information.name}}</span>
+              </li>
+              <li class="col-md-6 col-sm-6 clearfix mb15">
+                <span class="text-bold left">空闲cpu</span>
+                <span class="right">{{information.pfreeCpu}}</span>
+              </li>
+              <li class="col-md-6 col-sm-6 clearfix mb15">
+                <span class="text-bold left">服务器总内存</span>
+                <span class="right">{{information.totleMemory}}</span>
+              </li>
+              <li class="col-md-6 col-sm-6 clearfix mb15">
+                <span class="text-bold left">服务器可用内存</span>
+                <span class="right">{{information.availableMemory}}</span>
+              </li>
+              <li class="col-md-6 col-sm-6 clearfix mb15">
+                <span class="text-bold left">服务器总容量</span>
+                <span class="right">{{information.totalDisk}}</span>
+              </li>
+              <li class="col-md-6 col-sm-6 clearfix mb15">
+                <span class="text-bold left">服务器已用容量</span>
+                <span class="right">{{information.usedDIsk}}</span>
+              </li>
+            </ul>
+          </div>
+          <!-- #end panel-body -->
+        </div>
+        <!-- #end panel -->
+      </div>
+
+      <!-- #end computer Message -->
+    </div>
+    <!-- #end row -->
+  </div>
+  <!-- #end page-wrap -->
+</div>

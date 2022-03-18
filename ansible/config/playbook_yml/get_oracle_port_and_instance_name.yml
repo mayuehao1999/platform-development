@@ -1,0 +1,13 @@
+#通过服务查询oracle的服务名和端口名
+---
+- hosts: all
+  ignore_errors: yes
+  gather_facts: False
+  tasks:
+    - name: "查询开始"
+      become: yes
+      become_user: oracle
+      shell: source $HOME/.bash_profile && lsnrctl status | awk '/PORT/ { print $3 }' &&  ps -ef |grep ora_mmon|grep -v grep | awk '{print $8}' |  awk -F_ '{print $3}' 
+      register: result
+    - name: "显示返回结果"
+      debug: var=result.stdout verbosity=0

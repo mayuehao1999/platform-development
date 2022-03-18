@@ -1,0 +1,206 @@
+<div class="page page-table-static clearfix">
+  <ol class="breadcrumb breadcrumb-small">
+    <li>监控主机配置表单</li>
+    <li class="active"><a href="#/tables/db4bix-config">db4bix配置表单</a></li>
+  </ol>
+  
+      <div class="row">
+        <div class="page-wrap">
+          <div class="col-lg-12">
+            <div
+              class="panel panel-lined table-responsive mb30"
+              ng-controller="db4bix_config"
+            >
+              <!--这部分是写的悬浮输入框-->
+              <div class="modal fade" id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+                  <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                          <!--悬浮框头部-->
+                          <div class="modal-header">
+                              <button type="button" ng-click="resetForm()" class="close" data-dismiss="modal" aria-hidden="false">×</button>
+                              <h4 class="modal-title" id="myModalLabel">修改</h4>
+                          </div>
+
+                          <!--中间的表单,-->
+                          <div class="modal-body">
+              			      	<div class="panel panel-lined mb30">
+                              <!--表单头部-->
+              			      		<div class="panel-heading"><i>db4bix配置文件修改</i></div>
+              			      		<!--表单表单体-->
+                              <div class="panel-body">
+                              	<form class="form-inline" role="form"  >
+              			      				<div class="form-group form-group-sm">
+
+              			      					<div class="input-group">
+              			      						<span class="input-group-addon">ip地址</span>
+              			      					  <input type="text" ng-model="formData.host" class="form-control" placeholder="请输入oracle数据库ip地址">
+              			      					</div>
+
+              			      					<div class="input-group">
+              			      						<span class="input-group-addon">名称</span>
+              			      						<input type="text" ng-model="formData.name" class="form-control" placeholder="请输入名称">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">数据库实例名称</span>
+              			      						<input type="text" ng-model="formData.instance" class="form-control" placeholder="请输入数据库实例名称">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">数据库端口</span>
+              			      						<input type="text" ng-model="formData.port" class="form-control" placeholder="请输入数据库端口">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">oracle用户名</span>
+              			      						<input type="text" ng-model="formData.user" class="form-control" placeholder="请输入oracle用户名">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">oracle连接密码</span>
+              			      						<input type="password" ng-model="formData.password" class="form-control" placeholder="请输入oracle连接密码">
+              			      					</div>
+                                   
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">oracle服务名</span>
+              			      						<input type="text" ng-model="formData.serviceName" class="form-control" placeholder="请输入oracle服务名">
+                                    </div>
+
+              			      				</div>
+              			      			</form>
+              			      		</div>
+                              <!--表单体结束-->
+              			      	</div>
+                          </div>
+                        <!--表单体结束-->
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-default" ng-click="resetForm()" data-dismiss="modal">关闭</button>
+                              <button type="button" ng-click="reviseHostConfig()" class="btn btn-primary" data-dismiss="modal">提交更改</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="panel-body">
+                <div class="small text-bold left mt5">
+                  每一页展示&nbsp;
+                  <select
+                    data-ng-model="numPerPage"
+                    data-ng-options="num for num in numPerPageOpts"
+                    data-ng-change="onNumPerPageChange()"
+                  ></select>
+                  &nbsp;条数据
+                </div>
+                <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal">新增</button>
+
+                <form class="form-horizontal right col-lg-4">
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    placeholder="请数据搜索的数据的一部分"
+                    data-ng-model="searchKeywords"
+                    data-ng-keyup="search()"
+                  />
+                </form>
+              </div>
+
+              <!-- data table -->
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>
+                      名称
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('name') "
+                          ng-class="{active: row == 'name'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-name') "
+                          ng-class="{active: row == '-name'}"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      ip地址
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('host') "
+                          ng-class="{active: row == 'host'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-host') "
+                          ng-class="{active: row == '-host'}"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      实例名
+                    </th>
+                    <th>
+                      端口
+                    </th>
+                    <th>
+                      oracle用户名
+                    </th>
+                    <th>
+                      oracle密码
+                    </th>
+                    <th>
+                      oracle服务名称
+                    </th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="data in currentPageStores track by $index">
+                    <td>{{data.name}}</td>
+                    <td>{{data.host}}</td>
+                    <td>{{data.instance}}</td>
+                    <td>{{data.port}}</td>
+                    <td>{{data.user}}</td>
+                    <td>{{data.password}}</td>
+                    <td>{{data.serviceName}}</td>
+                    <td>
+                      <a data-toggle="modal" data-target="#myModal" ng-click="edit(data.name)">编辑</a>
+                      <a ng-click="del(data.name)">删除</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- #end data table -->
+
+              <div class="panel-footer clearfix">
+                <p class="left mt15 small">
+                  展示 {{currentPageStores.length*(currentPage - 1) + 1}} 条数据到
+                  {{currentPageStores.length*currentPage}} 条数据，一共有 {{datas.length}}
+                  条数据
+                </p>
+                <pagination
+                  boundary-links="true"
+                  total-items="filteredData.length"
+                  ng-model="currentPage"
+                  class="pagination-sm right"
+                  max-size="5"
+                  ng-change="select(currentPage)"
+                  items-per-page="numPerPage"
+                  rotate="false"
+                  previous-text="&lsaquo;"
+                  next-text="&rsaquo;"
+                  first-text="&laquo;"
+                  last-text="&raquo;"
+                ></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- #end row -->
+      </div>
+      <!-- #end page-wrap -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+
+[linux]
+192.168.213.209-1 ansible_ssh_host=192.168.213.209 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=1010124897 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+192.168.9.140-4 ansible_ssh_host=192.168.9.140 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=zlsoft.2020 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+192.168.213.207-2 ansible_ssh_host=192.168.213.207 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=1010124897 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+192.168.213.207-5 ansible_ssh_host=192.168.213.207 ansible_ssh_port=22 ansible_ssh_user=sion ansible_ssh_pass=1010124897 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+192.168.213.208-3 ansible_ssh_host=192.168.213.208 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=1010124897 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+192.168.213.208-8 ansible_ssh_host=192.168.213.208 ansible_ssh_port=22 ansible_ssh_user=sion ansible_ssh_pass=1010124897 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+192.168.213.210-12 ansible_ssh_host=192.168.213.210 ansible_ssh_port=22 ansible_ssh_user=sion ansible_ssh_pass=1010124897 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+192.168.0.0 ansible_ssh_host=192.168.0.0 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=1010124897.0 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+192.168.0.1 ansible_ssh_host=192.168.0.1 ansible_ssh_port=22.0 ansible_ssh_user=root ansible_ssh_pass=1010124897.0 system=linux ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"
+
+[windows]
+192.168.0.2 ansible_ssh_host=192.168.0.2 ansible_ssh_port=23.0 ansible_ssh_user=sion ansible_ssh_pass=123.0 system=windows ansible_ssh_extra_args="-o ControlMaster=auto -o ControlPersist=5d -o StrictHostKeyChecking=no"

@@ -1,0 +1,5 @@
+---
+- hosts: temp
+  gather_facts: yes
+  roles: 
+  - install_zabbix_agent

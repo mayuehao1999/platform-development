@@ -1,0 +1,27 @@
+{
+	"requestInformation":  "这个是你要监控的监控项，前面的名字随便取，后面的根据监控项来填写",
+    "requestInformation": {
+        "pfreeCpu": "system.cpu.util[,idle]",
+        "totleMemory": "vm.memory.size[total]",
+        "availableMemory": "vm.memory.size[available]",
+        "pAvailableMemory": "vm.memory.size[pavailable]",
+        "totalDisk": "vfs.fs.size[/,total]",
+        "usedDIsk": "vfs.fs.size[/,used]",
+        "pUsedDisk": "vfs.fs.size[/,pused]"
+    },
+	
+	"zabbixApiUrl": "zabbix api的地址",
+  "zabbixApiUrl": "http://192.168.213.209/monitor/api_jsonrpc.php",
+	
+	"params": "zabbix的用户名和密码，只改里面的值就可以了",
+  "params": {
+      "user": "guest",
+      "password": ""
+  },
+	
+	"sysmapids": "拓扑图的id,如果不知道多少，就数这个图在拓扑图是第几个就行，从1开始",
+  "sysmapids": "2",
+  
+  "informationHTML": "这里的HTML是显示那些zabbix读取数据的html，所取的属性是requestInformation中的",
+  "informationHTML": "<span>服务器名称:&nbsp;</span><span id='name'></span><br><span>IP地址:&nbsp;</span><span id='ip'></span><br><span>服务器空闲CPU%:&nbsp;</span><span id='pfreeCpu'></span><br><br><span>服务器总运行内存:&nbsp;</span><span id='totleMemory'></span><br><span>服务器可用运行内存:&nbsp;</span><span id='availableMemory'></span><br><span>服务器可用运行内存%:&nbsp;</span><span id='pAvailableMemory'></span><br><br><span>服务器总硬盘容量:&nbsp;</span><span id='totalDisk'></span><br><span>服务器可用硬盘容量:&nbsp;</span><span id='usedDIsk'></span><br><span>服务器可用硬盘容量%:&nbsp;</span><span id='pUsedDisk'></span><br>"
+}

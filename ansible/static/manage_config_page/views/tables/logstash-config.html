@@ -1,0 +1,187 @@
+<div class="page page-table-static clearfix">
+  <ol class="breadcrumb breadcrumb-small">
+    <li>监控主机配置表单</li>
+    <li class="active"><a href="#/tables/data-table">logstash 配置表单</a></li>
+  </ol>
+  
+      <div class="row">
+        <div class="page-wrap">
+          <div class="col-lg-12">
+            <div
+              class="panel panel-lined table-responsive mb30"
+              ng-controller="logstash_config"
+            >
+              <!--这部分是写的悬浮输入框-->
+              <div class="modal fade" id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+                  <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                          <!--悬浮框头部-->
+                          <div class="modal-header">
+                              <button type="button" ng-click="resetForm()" class="close" data-dismiss="modal" aria-hidden="false">×</button>
+                              <h4 class="modal-title" id="myModalLabel">修改</h4>
+                          </div>
+
+                          <!--中间的表单,-->
+                          <div class="modal-body">
+              			      	<div class="panel panel-lined mb30">
+                              <!--表单头部-->
+              			      		<div class="panel-heading"><i>logstash配置修改</i></div>
+              			      		<!--表单表单体-->
+                              <div class="panel-body">
+                              	<form class="form-inline" role="form"  >
+              			      				<div class="form-group form-group-sm">
+
+              			      					<div class="input-group">
+              			      						<span class="input-group-addon">ip地址</span>
+              			      					  <input type="text" ng-model="formData.dbip" class="form-control" placeholder="请输入ip所属组">
+              			      					</div>
+
+              			      					<div class="input-group">
+              			      						<span class="input-group-addon">连接端口</span>
+              			      					  <input type="text" ng-model="formData.port" class="form-control" placeholder="请输入ip所属组">
+              			      					</div>
+
+              			      					<div class="input-group">
+              			      						<span class="input-group-addon">数据库名称</span>
+              			      						<input type="text" ng-model="formData.dbname" class="form-control" placeholder="请填入链接端口">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">数据库服务名</span>
+              			      						<input type="text" ng-model="formData.serviceName" class="form-control" placeholder="请输入用户名">
+              			      					</div>  
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">数据库用户名</span>
+              			      						<input type="text" ng-model="formData.user" class="form-control" placeholder="请输入ip所属组">
+              			      					</div>
+
+                                    <div class="input-group">
+              			      						<span class="input-group-addon">数据库密码</span>
+              			      						<input type="password" ng-model="formData.passwd" class="form-control" placeholder="请输入用户名">
+              			      					</div>
+
+              			      				</div>
+              			      			</form>
+              			      		</div>
+                              <!--表单体结束-->
+              			      	</div>
+                          </div>
+                        <!--表单体结束-->
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-default" ng-click="resetForm()" data-dismiss="modal">关闭</button>
+                              <button type="button" ng-click="reviseHostConfig()" class="btn btn-primary" data-dismiss="modal">提交更改</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="panel-body">
+                <div class="small text-bold left mt5">
+                  每一页展示&nbsp;
+                  <select
+                    data-ng-model="numPerPage"
+                    data-ng-options="num for num in numPerPageOpts"
+                    data-ng-change="onNumPerPageChange()"
+                  ></select>
+                  &nbsp;条数据
+                </div>
+                <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal">新增</button>
+                <button type="button" class="btn btn-info btn-xs" ng-click="restartLogstash()">重启logstash服务</button>
+
+                <form class="form-horizontal right col-lg-4">
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    placeholder="请数据搜索的数据的一部分"
+                    data-ng-model="searchKeywords"
+                    data-ng-keyup="search()"
+                  />
+                </form>
+              </div>
+
+              <!-- data table -->
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>
+                      ip地址
+                      <div class="th">
+                        <i
+                          class="fa fa-caret-up icon-up"
+                          ng-click=" order('dbip') "
+                          ng-class="{active: row == 'dbip'}"
+                        ></i>
+                        <i
+                          class="fa fa-caret-down icon-down"
+                          ng-click=" order('-dbip') "
+                          ng-class="{active: row == '-dbip'}"
+                        ></i>
+                      </div>
+                    </th>
+
+                    <th>
+                      连接端口
+                    </th>
+                    <th>
+                      数据库连接用户名
+                    </th>
+                    <th>
+                      数据库连接密码
+                    </th>
+                    <th>
+                      数据库名称
+                    </th>
+                    <th>
+                      数据库服务名称
+                    </th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="data in currentPageStores track by $index">
+                    <td>{{data.dbip}}</td>
+                    <td>{{data.port}}</td>
+                    <td>{{data.user}}</td>
+                    <td>{{data.passwd}}</td>
+                    <td>{{data.dbname}}</td>
+                    <td>{{data.serviceName}}</td>
+                    <td>
+                      <a data-toggle="modal" data-target="#myModal" ng-click="edit(data.connstr)">编辑</a>
+                      <a ng-click="del(data.connstr)">删除</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- #end data table -->
+
+              <div class="panel-footer clearfix">
+                <p class="left mt15 small">
+                  展示 {{currentPageStores.length*(currentPage - 1) + 1}} 条数据到
+                  {{currentPageStores.length*currentPage}} 条数据，一共有 {{datas.length}}
+                  条数据
+                </p>
+                <pagination
+                  boundary-links="true"
+                  total-items="filteredData.length"
+                  ng-model="currentPage"
+                  class="pagination-sm right"
+                  max-size="5"
+                  ng-change="select(currentPage)"
+                  items-per-page="numPerPage"
+                  rotate="false"
+                  previous-text="&lsaquo;"
+                  next-text="&rsaquo;"
+                  first-text="&laquo;"
+                  last-text="&raquo;"
+                ></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- #end row -->
+      </div>
+      <!-- #end page-wrap -->
+    </div>
+  </div>
+</div>

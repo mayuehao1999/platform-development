@@ -1,0 +1,25 @@
+---
+- name: mkdir zabbix
+  win_file: 
+    path: "{{ zabbix_win_dir }}/log"
+    state: directory
+- name: 复制agent文件
+  win_copy:
+    src: zabbix_agent-{{zabbix_version}}-windows-amd64.zip
+    dest: "{{ zabbix_win_dir }}/"
+- name: 解压agent文件
+  win_unzip: 
+    src: "{{ zabbix_win_dir }}/zabbix_agent-{{zabbix_version}}-windows-amd64.zip"
+    dest: "{{ zabbix_win_dir }}/"
+- name: 复制配置文件到加压后的目录
+  win_template:
+    src: zabbix_agentd_win.conf
+    dest: "{{ zabbix_win_dir }}/conf/"
+- name: 注册agent服务
+  win_command: "{{ zabbix_win_dir }}/bin/zabbix_agentd.exe -i -c {{ zabbix_win_dir }}/conf/zabbix_agentd_win.conf"
+  args:
+    chdir: "{{ zabbix_win_dir }}"
+- name: 启动agent服务
+  win_command: "{{ zabbix_win_dir }}/bin/zabbix_agentd.exe -s -c {{ zabbix_win_dir }}/conf/zabbix_agentd_win.conf"
+  args:
+    chdir: "{{ zabbix_win_dir }}"

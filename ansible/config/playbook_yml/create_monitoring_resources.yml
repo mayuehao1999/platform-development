@@ -1,0 +1,26 @@
+#执行oracle数据库授权
+---
+- hosts: temp
+  ignore_errors: yes
+  tasks:
+    - name: "复制需要执行的文件"
+      copy: 
+        src: '{{ item.src }}'
+        dest: '{{ item.dest }}'
+      with_items: 
+        - { src: '/Program/Django/ansible/oracle/loadScript.sh', dest: '/mnt/ansible/temp/' }
+        - { src: '/Program/Django/ansible/oracle/create_monitoring_resources.sql', dest: '/mnt/ansible/temp/' }
+    - name: "执行脚本测试"
+      shell: sh /mnt/ansible/temp/loadScript.sh create_monitoring_resources.sql
+      register: result
+      failed_when: false
+    - name: "检查结果"
+      fail:
+        msg: "{{result.stdout_lines}}"
+      failed_when: result.rc != 0
+    - name: show oracle service name
+      debug: var=result.stdout verbosity=0
+    - name: delete temp dir
+      file: 
+        path: /mnt/ansible/temp
+        state: absent

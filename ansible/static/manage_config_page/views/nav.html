@@ -1,0 +1,47 @@
+<!-- Search box -->
+<div class="form-search">
+  <form id="site-search" action="#na">
+    <input
+      type="search"
+      class="form-control"
+      placeholder="Enter your query..."
+    />
+    <button type="submit" class="fa fa-search"></button>
+  </form>
+</div>
+
+<!-- Site nav (vertical) -->
+
+<nav
+  class="site-nav clearfix"
+  role="navigation"
+  collapse-nav-accordion
+  highlight-active
+>
+  <div class="nav-title panel-heading"><i>主要功能</i></div>
+  <ul class="list-unstyled nav-list">
+    <li>
+      <a href="#/dashboard">
+        <i class="fa fa-desktop icon"></i>
+        <span class="text">主机概括信息页面</span>
+      </a>
+    </li>
+  </ul>
+  <div class="nav-title panel-heading"><i>组件</i></div>
+  <ul class="list-unstyled nav-list">
+    <li>
+      <a href="javascript:;">
+        <i class="fa fa-table icon"></i>
+        <span class="text">监控主机配置表单</span>
+        <i class="arrow fa fa-angle-right right"></i>
+      </a>
+      <ul class="inner-drop list-unstyled">
+        <li><a href="#/tables/ansible-config">ansible host 配置表单</a></li>
+        <li><a href="#/tables/db4bix-config">db4bix 配置表单</a></li>
+        <li><a href="#/tables/logstash-config">logstash 配置表单</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<!-- #end theme settings -->

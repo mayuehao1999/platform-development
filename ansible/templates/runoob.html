@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <meta
+      name="description"
+      content="Appboard - Admin Template with Angularjs"
+    />
+    <meta
+      name="keywords"
+      content="appboard, webapp, admin, dashboard, template, ui"
+    />
+    <meta name="author" content="solutionportal" />
+    <!-- <base href="/"> -->
+
+    <script type="text/javascript">
+      var ipAddress = "http://" + {{ ipAddress | safe}} + ":8099/static/manage_config_page/"
+    </script>
+
+    <title>服务器信息管理</title>
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="{% static 'manage_config_page/fonts/font-awesome/font-awesome.css' %}"
+    />
+
+    <!-- Set this in dist folder in index.html file -->
+    <link
+      rel="stylesheet"
+      href="{% static 'manage_config_page/styles/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'manage_config_page/styles/main.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'manage_config_page/styles/main.min.css' %}"
+    />
+
+    <!-- Match Media polyfill for IE9 -->
+    <!--[if IE 9]><!-->
+    <script src="{% static 'manage_config_page/lib/ie/matchMedia.js' %}"></script>
+    <!--<![endif]-->
+  </head>
+
+  <body
+    ng-app="app"
+    id="app"
+    class="app {{themeActive}}"
+    custom-page
+    ng-controller="AppCtrl"
+  >
+    <header class="site-head clearfix" id="site-head" ng-controller="HeadCtrl">
+      <ng-include
+        src="'{% static 'manage_config_page/views/header.html' %}'"
+      ></ng-include>
+      <!-- linked header (static) view  {% static 'manage_config_page/views/header.html' %}  -->
+    </header>
+
+    <div class="main-container clearfix">
+      <aside
+        class="nav-wrap"
+        id="site-nav"
+        ng-controller="NavCtrl"
+        custom-scrollbar
+      >
+        <ng-include
+          src="'{% static 'manage_config_page/views/nav.html' %}'"
+        ></ng-include>
+      </aside>
+
+      <div class="content-container" id="content" ng-view>
+        <!-- content using routing -->
+      </div>
+
+      <footer id="site-foot" class="site-foot clearfix">
+        <p class="left">
+          &copy; 服务器信息管理 <strong>测试版</strong>, 测试版1.0.
+        </p>
+        <p class="right">v1.0</p>
+      </footer>
+    </div>
+
+    <!-- Set this in dist index.html -->
+    <script src="{% static 'manage_config_page/lib/vendors.js' %}"></script>
+    <script src="{% static 'manage_config_page/lib/plugins.js' %}"></script>
+    <script src="{% static 'manage_config_page/lib/jquery.js' %}"></script>
+    <script type="text/javascript">
+      //这部分是获取oracle的端口名，实例名，连接String，因为ansible的连接时间很长，所以最开始就连接
+      var oracle_message = []
+      $.post("/deal_config/get_oracle_port_and_instance_name", {}, (res) => {
+        oracle_message =  JSON.parse(res.result)
+      });
+
+      //这里设定最基本的请求ip和获取配置文件的信息
+      var ipAddress = "http://" + {{ ipAddress | safe}} + ":8099/static/manage_config_page/"
+      var configParam
+      $.get(
+        ipAddress + 'scripts/config.json',
+        function (data) {
+          configParam = data
+          $.getScript(
+            ipAddress +'scripts/zabbix_request.js',
+            () => {
+              console.log('加载文件')
+            }
+          )
+        }
+      )
+    </script>
+    <script src="{% static 'manage_config_page/lib/bootstrap.min.js' %}"></script>
+    <script src="{% static 'manage_config_page/scripts/app.js' %}"></script>
+    <!-- !End -->
+  </body>
+</html>

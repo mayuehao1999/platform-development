@@ -1,0 +1,43 @@
+---
+  - name: "Copy BinaryPackage File"
+    copy:
+      src: "{{ item }}"
+      dest: "{{ zabbix_dir }}/"
+    with_fileglob:
+       -  /etc/ansible/roles/install_zabbix_agent/files/*.rpm
+  - name: "Install filebeat"
+    yum:
+      name: "{{ zabbix_dir }}/filebeat-{{ filebeat_version }}-x86_64.rpm"
+      state: present
+  - name: "Uncompression Zabbix Agent BinaryPackage On CentsOS 5.x"
+    yum:
+      name: "{{ zabbix_dir }}/zabbix-agent2-{{ zabbix_version }}-1.el5.x86_64.rpm"
+      state: present
+    when: (ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == "5"
+  - name: "Uncompression Zabbix Agent BinaryPackage On CentsOS 6.x"
+    yum:
+      name: "{{ zabbix_dir }}/zabbix-agent2-{{ zabbix_version }}-1.el6.x86_64.rpm"
+      state: present    
+    when: (ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == "6"
+  - name: "Uncompression Zabbix Agent BinaryPackage On CentsOS 7.x"
+    yum:
+      name: "{{ zabbix_dir }}/zabbix-agent2-{{ zabbix_version }}-1.el7.x86_64.rpm"
+      state: present    
+    when: (ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == "7"
+  - name: "Uncompression Zabbix Agent BinaryPackage On CentsOS 8.x"
+    yum:
+      name: "{{ zabbix_dir }}/zabbix-agent2-{{ zabbix_version }}-1.el8.x86_64.rpm"
+      state: present    
+    when: (ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat') and ansible_distribution_major_version == "8"
+  - name: "Copy Config File"
+    template:
+      src: "/etc/ansible/roles/install_zabbix_agent/templates/zabbix_agent2.conf"
+      dest: "{{ zabbix_configdir }}/zabbix_agent2.conf"
+      owner: "{{ zabbix_user }}"
+      group: "{{ zabbix_user }}"
+      mode: "0644"
+  - name: start zabbix agent
+    service:
+      name: zabbix-agent2
+      state: restarted
+      enabled: yes
